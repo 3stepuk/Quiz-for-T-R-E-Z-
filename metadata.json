@@ -1,0 +1,6 @@
+{
+  "name": "90s & Britpop Music Quiz",
+  "description": "An interactive 90s music and Britpop quiz featuring Daily 90s Challenge quests, solo high-score chasing, Speed Round blitz, genre spotlights, multiplayer couch battles, streak combos, and global leaderboards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
