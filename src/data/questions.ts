@@ -1392,3 +1392,54 @@ export const QUESTIONS_DATABASE: Question[] = [
     year: 1994,
   }
 ];
+
+/**
+ * Shuffles the 4 options of a single question and updates correctIndex accordingly.
+ * Supports custom PRNG (e.g. Mulberry32) for deterministic daily challenges.
+ */
+export function shuffleQuestionOptions(
+  question: Question,
+  rng: () => number = Math.random
+): Question {
+  const rawOptions = [...question.options];
+  const correctText = rawOptions[question.correctIndex] ?? rawOptions[0];
+
+  const items = rawOptions.map((text, idx) => ({
+    text,
+    isCorrect: idx === question.correctIndex || text === correctText,
+  }));
+
+  // Fisher-Yates shuffle
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+
+  const newOptions = items.map((item) => item.text);
+  const newCorrectIndex = items.findIndex((item) => item.isCorrect);
+
+  return {
+    ...question,
+    options: newOptions,
+    correctIndex: newCorrectIndex >= 0 ? newCorrectIndex : 0,
+  };
+}
+
+/**
+ * Shuffles an array of questions AND shuffles each question's 4 options.
+ */
+export function shuffleQuestionsAndOptions(
+  questions: Question[],
+  rng: () => number = Math.random
+): Question[] {
+  const pool = [...questions];
+
+  // Shuffle question order
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+
+  // Shuffle each question's internal choices
+  return pool.map((q) => shuffleQuestionOptions(q, rng));
+}

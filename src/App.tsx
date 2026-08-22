@@ -11,7 +11,7 @@ import {
   GenreInfo,
   GenreTier,
 } from './types';
-import { QUESTIONS_DATABASE } from './data/questions';
+import { QUESTIONS_DATABASE, shuffleQuestionsAndOptions } from './data/questions';
 import { Header } from './components/Header';
 import { SoloSetup } from './components/SoloSetup';
 import { DailyChallengeSetup } from './components/DailyChallengeSetup';
@@ -101,7 +101,7 @@ export default function App() {
       pool = [...QUESTIONS_DATABASE];
     }
 
-    let shuffled = shuffle(pool);
+    let shuffled = shuffleQuestionsAndOptions(pool);
     let count = 10;
 
     if (format === 'standard') count = 20;
@@ -146,8 +146,8 @@ export default function App() {
       pool = [...QUESTIONS_DATABASE];
     }
 
-    // Prepare large shuffled pool for rapid-fire play
-    const shuffled = shuffle(pool);
+    // Prepare large shuffled pool with shuffled options for rapid-fire play
+    const shuffled = shuffleQuestionsAndOptions(pool);
     setActiveQuestions(shuffled);
     setCurrentQuestionIndex(0);
     setUserAnswers([]);
@@ -214,12 +214,12 @@ export default function App() {
       pool = [...QUESTIONS_DATABASE];
     }
 
-    const shuffled = shuffle(pool);
+      const shuffled = shuffleQuestionsAndOptions(pool);
     let selected = shuffled.slice(0, Math.min(questionCount, shuffled.length));
 
     // If pool has fewer questions than count, repeat with shuffling
     while (selected.length < questionCount) {
-      selected = [...selected, ...shuffle(pool)].slice(0, questionCount);
+      selected = [...selected, ...shuffleQuestionsAndOptions(pool)].slice(0, questionCount);
     }
 
     setActiveQuestions(selected);
@@ -264,7 +264,7 @@ export default function App() {
     const totalNeeded = newPlayers.length * questionsPerPlayer;
     let selected: Question[] = [];
     while (selected.length < totalNeeded) {
-      const shuffled = shuffle(pool);
+    const shuffled = shuffleQuestionsAndOptions(pool);
       selected = [...selected, ...shuffled];
     }
     selected = selected.slice(0, totalNeeded);

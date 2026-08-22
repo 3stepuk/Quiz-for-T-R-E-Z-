@@ -5,6 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    base: '/Quiz-for-T-R-E-Z-/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

@@ -1,5 +1,5 @@
 import { Question, DailyChallengeEntry, DailyChallengeStatus } from '../types';
-import { QUESTIONS_DATABASE } from '../data/questions';
+import { QUESTIONS_DATABASE, shuffleQuestionOptions } from '../data/questions';
 import { getRankTitle } from './scoring';
 
 const DAILY_STATUS_KEY = 'britpop_daily_challenge_status_v2';
@@ -81,7 +81,8 @@ export function getDailyQuestions(dateStr: string = getTodayDateString()): Quest
     }
   }
 
-  return selected.slice(0, 5);
+  // Deterministically shuffle the options within each selected daily question
+  return selected.slice(0, 5).map((q) => shuffleQuestionOptions(q, rng));
 }
 
 /**
